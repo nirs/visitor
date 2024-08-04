@@ -28,6 +28,17 @@ where the server is started.
 
 To clear the visitor state, delete the file.
 
+## Configure Windows firewall
+
+To allow remote access:
+
+1. Open the *Firewall and network security* system setting
+1. Click "Allow an app through firewall"
+1. Click "Allow another app..."
+1. Click "Browse..." and find `visitor.exe`
+1. Click "Network types..." and enable both public and private networks
+1. Click "Add"
+
 ## Using as Windows service
 
 Create a service:
