@@ -19,9 +19,9 @@ const visitorFile = "visitor.json"
 var mutex sync.Mutex
 
 type Visit struct {
-	Time    time.Time `json:time`
-	Count   uint64    `json:count`
-	Address string    `json:address`
+	Time  time.Time `json:"time"`
+	Count uint64    `json:"count"`
+	Host  string    `json:"host"`
 }
 
 type State struct {
@@ -36,21 +36,21 @@ func main() {
 }
 
 func visit(w http.ResponseWriter, r *http.Request) {
-	state, err := update()
+	state, err := update(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Fprintf(w, "<h1>Welcome to %v</h1>", state.Current.Address)
+	fmt.Fprintf(w, "<h1>Welcome to %v</h1>", state.Current.Host)
 	fmt.Fprintf(w, "<h2>You are visitor #%v</h2>", state.Current.Count)
 
-	if state.Last.Address != "" {
-		fmt.Fprintf(w, "<h2>Last visit on %v at %v</h2>", state.Last.Address, state.Last.Time)
+	if state.Last.Host != "" {
+		fmt.Fprintf(w, "<h2>Last visit on %v at %v</h2>", state.Last.Host, state.Last.Time)
 	}
 }
 
-func update() (*State, error) {
+func update(r *http.Request) (*State, error) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
@@ -59,7 +59,7 @@ func update() (*State, error) {
 		return nil, err
 	}
 
-	current := newVisit(last)
+	current := newVisit(last, r)
 	if err := writeVisit(current); err != nil {
 		return nil, err
 	}
@@ -67,20 +67,16 @@ func update() (*State, error) {
 	return &State{Current: current, Last: last}, nil
 }
 
-func ipAddress() string {
-	con, err := net.Dial("udp", "1.2.3.4:80")
-	if err != nil {
-		return "unknown"
-	}
-	return con.LocalAddr().(*net.UDPAddr).IP.String()
-}
-
-func newVisit(last *Visit) *Visit {
+func newVisit(last *Visit, r *http.Request) *Visit {
 	var count uint64
 	if last != nil {
 		count = last.Count + 1
 	}
-	return &Visit{Time: time.Now(), Count: count, Address: ipAddress()}
+	host, _, err := net.SplitHostPort(r.Host)
+	if err != nil {
+		host = ""
+	}
+	return &Visit{Time: time.Now(), Count: count, Host: host}
 }
 
 func readVisit() (*Visit, error) {
