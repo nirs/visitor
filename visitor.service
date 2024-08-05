@@ -1,0 +1,14 @@
+[Unit]
+Description=visitor service
+After=network.target
+
+[Service]
+Type=notify
+Restart=always
+User=visitor
+ExecStart=/usr/bin/visitor
+WorkingDirectory=/run/visitor
+RuntimeDirectory=visitor
+
+[Install]
+WantedBy=multi-user.target
