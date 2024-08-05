@@ -1,3 +1,5 @@
 /dist/
 visitor
 visitor.json
+*.tar.gz
+*.rpm

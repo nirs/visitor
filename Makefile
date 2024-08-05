@@ -1,9 +1,15 @@
-prog := visitor
+name := visitor
+version := 0.3.0
+pkgname := $(name)-$(version)
 
 all: linux windows
 
 linux:
-	CGO_ENABLED=0 GOOS=$@ go build -o dist/$(prog)-$@-amd64
+	CGO_ENABLED=0 GOOS=$@ go build -o dist/$(name)-$@-amd64
 
 windows:
-	GOOS=$@ go build -o dist/$(prog)-$@-amd64.exe
+	GOOS=$@ go build -o dist/$(name)-$@-amd64.exe
+
+rpm:
+	git archive --prefix $(pkgname)/ HEAD > $(pkgname).tar.gz
+	rpmbuild -ta $(pkgname).tar.gz

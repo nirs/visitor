@@ -26,9 +26,35 @@ reported on original cluster address.
 The visitor stores the last visit info at `visitor.json` in the directory
 where the server is started.
 
+When running as a Linux service, the visitor.json file is located in
+/run/visitor.
+
 To clear the visitor state, delete the file.
 
-## Configure Windows firewall
+## Installing on Linux
+
+Install the rpm package:
+
+```
+sudo dnf install visitor-0.3.0-1.x86_64.rpm
+```
+
+Enable and start the service:
+
+```
+sudo systemctl enable visitor --now
+```
+
+Enable remote access:
+
+```
+sudo firewall-cmd --zone libvirt --add-service=visitor --permanent
+sudo firewall-cmd --reload
+```
+
+## Installing on Windows
+
+### Configure Windows firewall
 
 To allow remote access:
 
@@ -39,7 +65,7 @@ To allow remote access:
 1. Click "Network types..." and enable both public and private networks
 1. Click "Add"
 
-## Using as Windows service
+### Using as Windows service
 
 Create a service:
 
@@ -68,4 +94,6 @@ Delete the service:
 sc.exe delete visitor
 ```
 
-Tested with Windows server 2022.
+## License
+
+visitor is under the [Apache 2.0 license](/LICENSE)
