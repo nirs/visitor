@@ -30,6 +30,7 @@ type State struct {
 }
 
 func main() {
+	startService()
 	http.HandleFunc("/", visit)
 	http.HandleFunc("/favicon.ico", http.NotFound)
 	log.Fatal(http.ListenAndServe(":8000", nil))

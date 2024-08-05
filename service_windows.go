@@ -1,5 +1,3 @@
-// Simplified version of https://github.com/caddyserver/caddy/blob/master/service_windows.go
-
 package main
 
 import (
@@ -9,32 +7,31 @@ import (
 	"golang.org/x/sys/windows/svc"
 )
 
-func init() {
+func startService() {
 	isService, err := svc.IsWindowsService()
 	if err != nil || !isService {
-		return
+		return // Not running as a Windows service.
 	}
 
-	// Windows services always start in the system32 directory, try to
-	// switch into the directory where the executable is.
+	// XXX Use %AppData%/visitor?
 	execPath, err := os.Executable()
 	if err == nil {
 		_ = os.Chdir(filepath.Dir(execPath))
 	}
 
 	go func() {
-		_ = svc.Run("", runner{})
-
-		// XXX Do graceful shutdown.
+		_ = svc.Run("", handler{})
 		os.Exit(0)
 	}()
 }
 
-type runner struct{}
+type handler struct{}
 
-func (runner) Execute(args []string, request <-chan svc.ChangeRequest, status chan<- svc.Status) (bool, uint32) {
-	// XXX Report svc.StartPending and report svc.Running when the web server
-	// is listening.
+func (handler) Execute(args []string, request <-chan svc.ChangeRequest, status chan<- svc.Status) (bool, uint32) {
+	status <- svc.Status{
+		State: svc.StartPending,
+	}
+
 	status <- svc.Status{
 		State:   svc.Running,
 		Accepts: svc.AcceptStop | svc.AcceptShutdown,
