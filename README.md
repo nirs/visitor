@@ -45,10 +45,10 @@ Enable and start the service:
 sudo systemctl enable visitor --now
 ```
 
-Enable remote access:
+To allow remote access open port 8000. Example for firewalld:
 
 ```
-sudo firewall-cmd --zone libvirt --add-service=visitor --permanent
+sudo firewall-cmd --add-port=8000/tcp --permanent
 sudo firewall-cmd --reload
 ```
 
