@@ -3,7 +3,7 @@
 
 Name: visitor
 Version: 0.4.0
-Release: 0%{?dist}
+Release: 1%{?dist}
 Summary: Disaster recovery demo
 
 License: Apache-2.0
