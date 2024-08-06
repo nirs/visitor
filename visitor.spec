@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: The RamenDR authors
+# SPDX-License-Identifier: Apache-2.0
+
 Name: visitor
 Version: 0.4.0
 Release: 0%{?dist}

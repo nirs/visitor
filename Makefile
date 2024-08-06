@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: The RamenDR authors
+# SPDX-License-Identifier: Apache-2.0
+
 name := visitor
 version := 0.4.0
 pkgname := $(name)-$(version)
