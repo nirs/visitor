@@ -9,9 +9,9 @@ After=network.target
 Type=notify
 Restart=always
 User=visitor
+StateDirectory=visitor
+WorkingDirectory=/var/lib//visitor
 ExecStart=/usr/bin/visitor
-WorkingDirectory=/run/visitor
-RuntimeDirectory=visitor
 
 [Install]
 WantedBy=multi-user.target
