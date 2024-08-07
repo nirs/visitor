@@ -31,8 +31,8 @@ reported on original cluster address.
 The visitor stores the last visit info at `visitor.json` in the directory
 where the server is started.
 
-When running as a Linux service, the visitor.json file is located in
-/run/visitor.
+When running as a Linux service, the `visitor.json` file is located in
+`/usr/lib/visitor`.
 
 To clear the visitor state, delete the file.
 
