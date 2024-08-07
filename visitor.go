@@ -17,9 +17,13 @@ import (
 	"time"
 )
 
-const visitorFile = "visitor.json"
+const (
+	visitorFile = "visitor.json"
+	clusterFile = "/mnt/config/cluster"
+)
 
 var mutex sync.Mutex
+var clusterName string
 
 type Visit struct {
 	Time  time.Time `json:"time"`
@@ -33,6 +37,7 @@ type State struct {
 }
 
 func main() {
+	readClusterFile()
 	startService()
 	http.HandleFunc("/", visit)
 	http.HandleFunc("/favicon.ico", http.NotFound)
@@ -52,6 +57,17 @@ func visit(w http.ResponseWriter, r *http.Request) {
 	if state.Last.Host != "" {
 		fmt.Fprintf(w, "<h2>Last visit on %v at %v</h2>", state.Last.Host, state.Last.Time)
 	}
+}
+
+func readClusterFile() {
+	data, err := os.ReadFile(clusterFile)
+	if err != nil {
+		if !errors.Is(err, fs.ErrNotExist) {
+			log.Print("Cannot read %s: %s", clusterFile, err)
+		}
+		return
+	}
+	clusterName = string(data)
 }
 
 func update(r *http.Request) (*State, error) {
@@ -76,9 +92,9 @@ func newVisit(last *Visit, r *http.Request) *Visit {
 	if last != nil {
 		count = last.Count + 1
 	}
-	host, _, err := net.SplitHostPort(r.Host)
-	if err != nil {
-		host = ""
+	host := clusterName
+	if host == "" {
+		host, _, _ = net.SplitHostPort(r.Host)
 	}
 	return &Visit{Time: time.Now(), Count: count, Host: host}
 }
