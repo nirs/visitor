@@ -36,6 +36,12 @@ When running as a Linux service, the `visitor.json` file is located in
 
 To clear the visitor state, delete the file.
 
+## Cluster config
+
+To report the actual cluster name, create the file
+`/mnt/config/cluster`. The content of the file will be used as the
+cluster name in the visitor page.
+
 ## Installing on Linux
 
 Install the rpm package:
