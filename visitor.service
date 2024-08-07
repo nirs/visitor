@@ -3,7 +3,7 @@
 
 [Unit]
 Description=visitor service
-After=network.target
+After=cloud-final.service
 
 [Service]
 Type=notify
