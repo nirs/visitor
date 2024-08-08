@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 Name: visitor
-Version: 0.7.0
+Version: 0.8.0
 Release: 1%{?dist}
 Summary: Disaster recovery demo
 

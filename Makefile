@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 name := visitor
-version := 0.7.0
+version := 0.8.0
 pkgname := $(name)-$(version)
 
 all: linux windows
