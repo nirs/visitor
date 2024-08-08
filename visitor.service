@@ -3,7 +3,7 @@
 
 [Unit]
 Description=visitor service
-After=cloud-final.service
+After=cloud-config.service
 
 [Service]
 Type=notify
