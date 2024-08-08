@@ -55,7 +55,8 @@ func visit(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<h2>You are visitor #%v</h2>", state.Current.Count)
 
 	if state.Last.Host != "" {
-		fmt.Fprintf(w, "<h2>Last visit on %v at %v</h2>", state.Last.Host, state.Last.Time)
+		elapsed := state.Current.Time.Sub(state.Last.Time).Round(time.Millisecond)
+		fmt.Fprintf(w, "<h2>Last visit on %v %s ago</h2>", state.Last.Host, elapsed)
 	}
 }
 
